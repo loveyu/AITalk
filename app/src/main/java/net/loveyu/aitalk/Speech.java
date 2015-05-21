@@ -2,14 +2,19 @@ package net.loveyu.aitalk;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.widget.Toast;
 
 import com.baidu.speechsynthesizer.SpeechSynthesizer;
+
+import java.util.HashMap;
+import java.util.Stack;
 
 /**
  * Created by loveyu on 2015/5/21.
  * 说话
  */
 public class Speech {
+
     public static void say(Context context, String say) {
         SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer(context, "holder", new SpeechListener(context));
         new Thread(new Run(speechSynthesizer, say)).start();
@@ -35,7 +40,6 @@ class Run implements Runnable {
         speechSynthesizer.setParam(SpeechSynthesizer.PARAM_PITCH, "5");
         speechSynthesizer.setParam(SpeechSynthesizer.PARAM_AUDIO_ENCODE, SpeechSynthesizer.AUDIO_ENCODE_AMR);
         speechSynthesizer.setParam(SpeechSynthesizer.PARAM_AUDIO_RATE, SpeechSynthesizer.AUDIO_BITRATE_AMR_15K85);
-
         speechSynthesizer.speak(say);
     }
 }

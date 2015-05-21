@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -34,7 +35,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private Robots robots;
 
-    private int speakStatus = R.string.start_speak;
+    private int speakStatus = R.string.stop_speak;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     public void setRobotsResult(String msg) {
         Talk.add(msg, Talk.Robots);
-        Speech.say(this, msg);
+        if (speakStatus == R.string.stop_speak) {
+            Speech.say(this, msg);
+        }
         setListViewChange();
     }
 
@@ -87,6 +90,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem search = menu.findItem(R.id.action_speak_status);
+        search.setTitle(speakStatus);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -102,10 +111,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 } else {
                     speakStatus = R.string.start_speak;
                 }
-                item.setTitle(speakStatus);
-                return true;
-            case R.id.action_speak_pause:
-                //TODO
+                getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
                 return true;
         }
         return super.onOptionsItemSelected(item);

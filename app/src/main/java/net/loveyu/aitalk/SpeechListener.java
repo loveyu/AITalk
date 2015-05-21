@@ -60,7 +60,6 @@ public class SpeechListener implements SpeechSynthesizerListener {
 
     @Override
     public void onSpeechFinish(SpeechSynthesizer speechSynthesizer) {
-
     }
 
     @Override
