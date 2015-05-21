@@ -7,11 +7,11 @@
         android:title="@string/stop_speak"
         android:orderInCategory="100"
         app:showAsAction="never" />
-    <!--<item-->
-    <!--android:id="@+id/action_speak_pause"-->
-    <!--android:title="@string/pause_speak"-->
-    <!--android:orderInCategory="100"-->
-    <!--app:showAsAction="never" />-->
+    <item
+        android:id="@+id/action_speak_pause"
+        android:title="@string/pause_speak"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_exit"
         android:title="@string/action_exit"

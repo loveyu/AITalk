@@ -35,6 +35,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private int speakStatus = R.string.stop_speak;
 
+    private Speech speech;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 setRobotsResult(msg);
             }
         });
+        speech = new Speech(this);
         mRecognitionListener = new DialogRecognitionListener() {
 
             @Override
@@ -75,7 +78,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void setRobotsResult(String msg) {
         Talk.add(msg, Talk.Robots);
         if (speakStatus == R.string.stop_speak) {
-            Speech.say(this, msg);
+            speech.say(msg);
         }
         setListViewChange();
     }
@@ -104,6 +107,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             case R.id.action_exit:
                 finish();
                 return true;
+            case R.id.action_speak_pause:
+                speech.destroy();
+                return true;
             case R.id.action_speak_status:
                 if (speakStatus == R.string.start_speak) {
                     speakStatus = R.string.stop_speak;
@@ -114,6 +120,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void finish() {
+        if (speech != null) {
+            speech.destroy();
+        }
+        super.finish();
     }
 
     @Override
@@ -156,6 +170,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         if (mDialog != null) {
             mDialog.dismiss();
         }
+        if (speech != null) {
+            speech.destroy();
+        }
         super.onDestroy();
     }
+
+
 }
