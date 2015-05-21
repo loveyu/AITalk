@@ -60,6 +60,8 @@ public class SpeechListener implements SpeechSynthesizerListener {
 
     @Override
     public void onSpeechFinish(SpeechSynthesizer speechSynthesizer) {
+        MessageHandler.handler.sendMessage(
+                MessageHandler.handler.obtainMessage(MessageHandler.Speak_Finish, ""));
     }
 
     @Override

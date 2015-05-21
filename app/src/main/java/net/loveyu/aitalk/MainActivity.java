@@ -1,6 +1,7 @@
 package net.loveyu.aitalk;
 
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +11,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.baidu.voicerecognition.android.ui.BaiduASRDigitalDialog;
 import com.baidu.voicerecognition.android.ui.DialogRecognitionListener;
@@ -25,8 +25,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private TalkAdapter talkAdapter;
 
-    private static final String TAG = MainActivity.class.getSimpleName();
-
     private BaiduASRDigitalDialog mDialog = null;
 
     private DialogRecognitionListener mRecognitionListener;
@@ -36,6 +34,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private Robots robots;
 
     private int speakStatus = R.string.stop_speak;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,28 +120,35 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.speak:
-                //if (mDialog == null || mCurrentTheme != Config.DIALOG_THEME) {
-                mCurrentTheme = Config.DIALOG_THEME;
-                if (mDialog != null) {
-                    mDialog.dismiss();
-                }
-                Bundle params = new Bundle();
-                params.putString(BaiduASRDigitalDialog.PARAM_API_KEY, Constants.API_KEY);
-                params.putString(BaiduASRDigitalDialog.PARAM_SECRET_KEY, Constants.SECRET_KEY);
-                params.putInt(BaiduASRDigitalDialog.PARAM_DIALOG_THEME, Config.DIALOG_THEME);
-                mDialog = new BaiduASRDigitalDialog(this, params);
-                mDialog.setDialogRecognitionListener(mRecognitionListener);
-                //}
-                mDialog.getParams().putInt(BaiduASRDigitalDialog.PARAM_PROP, Config.CURRENT_PROP);
-                mDialog.getParams().putString(BaiduASRDigitalDialog.PARAM_LANGUAGE,
-                        Config.getCurrentLanguage());
-                Log.e("DEBUG", "Config.PLAY_START_SOUND = " + Config.PLAY_START_SOUND);
-                mDialog.getParams().putBoolean(BaiduASRDigitalDialog.PARAM_START_TONE_ENABLE, Config.PLAY_START_SOUND);
-                mDialog.getParams().putBoolean(BaiduASRDigitalDialog.PARAM_END_TONE_ENABLE, Config.PLAY_END_SOUND);
-                mDialog.getParams().putBoolean(BaiduASRDigitalDialog.PARAM_TIPS_TONE_ENABLE, Config.DIALOG_TIPS_SOUND);
-                mDialog.show();
+                openSpeakDialog();
                 break;
         }
+    }
+
+    public void openSpeakDialog() {
+        //if (mDialog == null || mCurrentTheme != Config.DIALOG_THEME) {
+        mCurrentTheme = Config.DIALOG_THEME;
+        if (mDialog != null) {
+            if (mDialog.isShowing()) {
+                return;
+            }
+            mDialog.dismiss();
+        }
+        Bundle params = new Bundle();
+        params.putString(BaiduASRDigitalDialog.PARAM_API_KEY, Constants.API_KEY);
+        params.putString(BaiduASRDigitalDialog.PARAM_SECRET_KEY, Constants.SECRET_KEY);
+        params.putInt(BaiduASRDigitalDialog.PARAM_DIALOG_THEME, Config.DIALOG_THEME);
+        mDialog = new BaiduASRDigitalDialog(this, params);
+        mDialog.setDialogRecognitionListener(mRecognitionListener);
+        //}
+        mDialog.getParams().putInt(BaiduASRDigitalDialog.PARAM_PROP, Config.CURRENT_PROP);
+        mDialog.getParams().putString(BaiduASRDigitalDialog.PARAM_LANGUAGE,
+                Config.getCurrentLanguage());
+        Log.e("DEBUG", "Config.PLAY_START_SOUND = " + Config.PLAY_START_SOUND);
+        mDialog.getParams().putBoolean(BaiduASRDigitalDialog.PARAM_START_TONE_ENABLE, Config.PLAY_START_SOUND);
+        mDialog.getParams().putBoolean(BaiduASRDigitalDialog.PARAM_END_TONE_ENABLE, Config.PLAY_END_SOUND);
+        mDialog.getParams().putBoolean(BaiduASRDigitalDialog.PARAM_TIPS_TONE_ENABLE, Config.DIALOG_TIPS_SOUND);
+        mDialog.show();
     }
 
     @Override
